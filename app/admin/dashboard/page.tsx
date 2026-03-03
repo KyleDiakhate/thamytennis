@@ -30,7 +30,7 @@ export default function DashboardPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
-          <Link href="/admin/bookings" className="bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition">
+          <Link href="/admin/booking" className="bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition">
             <div className="text-3xl mb-3">📋</div>
             <h2 className="text-lg font-semibold text-gray-900">Marcações</h2>
             <p className="text-gray-500 text-sm mt-1">Ver e gerir os pedidos de marcação</p>
