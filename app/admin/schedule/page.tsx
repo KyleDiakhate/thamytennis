@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { StrictMode, useEffect, useState } from 'react'
 import { supabase } from '@/app/lib/supabase'
 import Link from 'next/link'
 
@@ -142,6 +142,13 @@ export default function SchedulePage() {
                   <span className={`text-xs font-medium px-3 py-1 rounded-full ${slot.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
                     {slot.is_active ? 'Ativo' : 'Inativo'}
                   </span>
+                  <button onClick={() => setForm({
+                    day_of_week: form.day_of_week,
+                    start_time : slot.start_time,
+                    end_time : slot.end_time, 
+                  })} className='text-sm text-blue-400 hover:text-blue-600 transition'>
+                    Copiar
+                  </button>
 
                   <button
                     onClick={() => toggleActive(slot.id, slot.is_active)}

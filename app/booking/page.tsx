@@ -1,50 +1,81 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/app/lib/supabase'
 import Navbar from '@/app/components/Navbar'
+
+type Availability = {
+  id: number
+  day_of_week: number
+  start_time: string
+  end_time: string
+}
 
 export default function BookingPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [slots, setSlots] = useState<Availability[]>([])
+  const [selectedSlot, setSelectedSlot] = useState<Availability | null>(null)
 
   const [form, setForm] = useState({
     student_name: '',
     student_email: '',
     student_phone: '',
     date: '',
-    start_time: '',
-    end_time: '',
   })
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
+  useEffect(() => {
+    if (!form.date) return
+
+    const dayOfWeek = new Date(form.date).getDay()
+    // JavaScript: 0=Domingo, 1=Segunda...
+    // A nossa tabela: 0=Segunda, 6=Domingo
+    // Por isso convertemos:
+    const adjustedDay = dayOfWeek === 0 ? 6 : dayOfWeek - 1
+
+    fetchSlots(adjustedDay)
+    setSelectedSlot(null)
+  }, [form.date])
+
+  async function fetchSlots(dayOfWeek: number) {
+    const { data } = await supabase
+      .from('availability')
+      .select('*')
+      .eq('day_of_week', dayOfWeek)
+      .eq('is_active', true)
+
+    if (data) setSlots(data)
+    else setSlots([])
+  }
+
   async function handleSubmit() {
     setLoading(true)
     setError('')
 
-    // Validação básica
-    if (!form.student_name || !form.student_email || !form.student_phone || !form.date || !form.start_time || !form.end_time) {
+    if (!form.student_name || !form.student_email || !form.student_phone || !form.date || !selectedSlot) {
       setError('Por favor preenche todos os campos.')
       setLoading(false)
       return
     }
 
-    const { error } = await supabase.from('bookings').insert({
+    const { data, error } = await supabase.from('bookings').insert({
       student_name: form.student_name,
       student_email: form.student_email,
       student_phone: form.student_phone,
       date: form.date,
-      start_time: form.start_time,
-      end_time: form.end_time,
+      start_time: selectedSlot.start_time,
+      end_time: selectedSlot.end_time,
       status: 'pending',
     })
 
-
+    console.log('error:', error)
+    console.log('data:', data)
     if (error) {
       setError('Erro ao enviar marcação. Tenta novamente.')
       setLoading(false)
@@ -111,28 +142,27 @@ export default function BookingPage() {
               />
             </div>
 
-            <div className="flex gap-4">
-              <div className="flex flex-col gap-1 flex-1">
-                <label className="text-sm font-medium text-gray-700">Hora início</label>
-                <input
-                  type="time"
-                  name="start_time"
-                  value={form.start_time}
-                  onChange={handleChange}
-                  className="border rounded-lg p-3 outline-none focus:ring-2 focus:ring-green-500"
-                />
+            {/* Horários disponíveis */}
+            {form.date && (
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-700">Horário disponível</label>
+                {slots.length === 0 ? (
+                  <p className="text-sm text-red-400">Não há horários disponíveis para este dia.</p>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    {slots.map((slot) => (
+                      <button
+                        key={slot.id}
+                        onClick={() => setSelectedSlot(slot)}
+                        className={`border rounded-lg p-3 text-left transition ${selectedSlot?.id === slot.id ? 'border-green-500 bg-green-50 text-green-700' : 'hover:border-green-300'}`}
+                      >
+                        ⏰ {slot.start_time} - {slot.end_time}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
-              <div className="flex flex-col gap-1 flex-1">
-                <label className="text-sm font-medium text-gray-700">Hora fim</label>
-                <input
-                  type="time"
-                  name="end_time"
-                  value={form.end_time}
-                  onChange={handleChange}
-                  className="border rounded-lg p-3 outline-none focus:ring-2 focus:ring-green-500"
-                />
-              </div>
-            </div>
+            )}
 
             {error && (
               <p className="text-red-500 text-sm text-center">{error}</p>
