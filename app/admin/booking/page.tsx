@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { supabase } from '@/app/lib/supabase'
 import Link from 'next/link'
 
@@ -14,7 +13,10 @@ type Booking = {
   start_time: string
   end_time: string
   status: string
+  age_group: string,
+  service_type: string, 
   created_at: string
+
 }
 
 export default function BookingsPage() {
@@ -85,6 +87,8 @@ export default function BookingsPage() {
                   <div className="flex flex-col gap-1">
                     <h2 className="font-semibold text-gray-900">{booking.student_name}</h2>
                     <p className="text-sm text-gray-500">{booking.student_email} · {booking.student_phone}</p>
+                    <p className='text-sm'>Faixa Etária: <span className='text-gray-500'>{booking.age_group}</span></p> 
+                    <p className='text-sm'>Formato: <span className='text-gray-500'>{booking.service_type}</span></p> 
                     <p className="text-sm text-gray-700">
                       📅 {booking.date} · ⏰ {booking.start_time} - {booking.end_time}
                     </p>

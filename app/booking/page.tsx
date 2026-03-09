@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/app/lib/supabase'
 import Navbar from '@/app/components/Navbar'
+import { createBooking } from '../actions/booking'
 
 type Availability = {
   id: number
@@ -24,6 +25,9 @@ export default function BookingPage() {
     student_email: '',
     student_phone: '',
     date: '',
+    service_type: '',
+    age_group: '', 
+    notes: '', 
   })
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -34,9 +38,6 @@ export default function BookingPage() {
     if (!form.date) return
 
     const dayOfWeek = new Date(form.date).getDay()
-    // JavaScript: 0=Domingo, 1=Segunda...
-    // A nossa tabela: 0=Segunda, 6=Domingo
-    // Por isso convertemos:
     const adjustedDay = dayOfWeek === 0 ? 6 : dayOfWeek - 1
 
     fetchSlots(adjustedDay)
@@ -58,30 +59,30 @@ export default function BookingPage() {
     setLoading(true)
     setError('')
 
-    if (!form.student_name || !form.student_email || !form.student_phone || !form.date || !selectedSlot) {
+    if (!form.student_name || !form.student_email || !form.student_phone || !form.date || !form.age_group || !form.service_type || !selectedSlot) {
       setError('Por favor preenche todos os campos.')
       setLoading(false)
       return
     }
 
-    const { data, error } = await supabase.from('bookings').insert({
+    const result = await createBooking({
       student_name: form.student_name,
       student_email: form.student_email,
       student_phone: form.student_phone,
       date: form.date,
       start_time: selectedSlot.start_time,
       end_time: selectedSlot.end_time,
-      status: 'pending',
+      service_type: form.service_type,
+      age_group: form.age_group,
+      notes: form.notes,
     })
 
-    console.log('error:', error)
-    console.log('data:', data)
-    if (error) {
+
+    if(!result.success){
       setError('Erro ao enviar marcação. Tenta novamente.')
       setLoading(false)
       return
     }
-
     router.push('/confirmation')
   }
 
@@ -164,10 +165,39 @@ export default function BookingPage() {
               </div>
             )}
 
-            {error && (
+         
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-gray-700">Faixa Etária</label>
+            <select 
+                name="age_group"
+                value={form.age_group}
+                onChange={(e) => setForm({ ...form, age_group: e.target.value})}
+                className="border rounded-lg p-3 outline-none focus:ring-2 focus:ring-green-500"
+            >
+              <option value="">Selecione a faixa etária</option>
+              <option value="Criança">Crianças (até 12 anos)</option>
+              <option value="Adolescentes">Adolescentes (13-17 anos)</option>
+              <option value="Adultos">Adultos (18+ anos)</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-gray-700">Formato</label>
+            <select 
+                name="service_type"
+                value={form.service_type}
+                onChange={(e) => setForm({ ...form, service_type: e.target.value})}
+                className="border rounded-lg p-3 outline-none focus:ring-2 focus:ring-green-500"
+            >
+              <option value="">Selecione o formato</option>
+              <option value="Individual">Individual</option>
+              <option value="Grupo">Grupo</option>
+            </select>
+          </div>
+             {error && (
               <p className="text-red-500 text-sm text-center">{error}</p>
             )}
-
+          
             <button
               onClick={handleSubmit}
               disabled={loading}
