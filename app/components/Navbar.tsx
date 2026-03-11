@@ -7,10 +7,13 @@ import { motion, AnimatePresence } from "framer-motion"
 const links = [
     {href: '#sobre', label: 'Sobre'},
     {href: '#servicos', label: 'Serviços'},
-    {href: '#contacto', label: 'Contacto'},
+
 ]
 
-export default function Navbar(){
+type Props = {
+    onBooking : () => void
+}
+export default function Navbar({ onBooking } : Props){
     const [menuOpen, setMenuOpen] = useState(false)
 
     return(
@@ -31,12 +34,12 @@ export default function Navbar(){
                             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#52B788] transition-all duration-300 group-hover:w-full" />
                         </Link>
                     ))}
-                <Link 
-                href="/booking"
+                <button
+                onClick={onBooking}
                 className="border border-white text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-white hover:text-[#1B4332] transition-all duration-300"
                 >
                     Marcar Treino
-                </Link>
+                </button>
                 </div>
                 <button 
                 className="md:hidden text-white z-50"

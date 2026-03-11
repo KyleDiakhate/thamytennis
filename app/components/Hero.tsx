@@ -1,7 +1,10 @@
 import Image from 'next/image'
-import Link from 'next/link'
 
-export default function Hero() {
+type Props = {
+    onBooking : () => void
+}
+
+export default function Hero({ onBooking }: Props) {
   return (
     <section className="bg-[#1B4332] min-h-[85vh] relative overflow-hidden pt-16">
 
@@ -24,12 +27,12 @@ export default function Hero() {
           <p className="text-white/60 text-lg mb-10 max-w-md leading-relaxed">
             Aulas personalizadas para todos os niveis.
           </p>
-          <Link
-            href="/booking"
+          <button
+            onClick={onBooking}
             className="inline-flex items-center gap-2 bg-[#52B788] text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-[#3d9e6e] transition-all duration-300 hover:gap-4"
           >
             Marcar treino <span>→</span>
-          </Link>
+          </button>
         </div>
         <div className="flex-1 flex justify-center items-center hidden md:flex">
           <div className="relative w-[220px] h-[320px] group  transition-transform duration-500 hover:scale-105">
