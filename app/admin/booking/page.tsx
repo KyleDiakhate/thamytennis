@@ -89,8 +89,22 @@ export default function BookingsPage() {
                     <p className="text-sm text-gray-500">{booking.student_email} · {booking.student_phone}</p>
                     <p className='text-sm'>Faixa Etária: <span className='text-gray-500'>{booking.age_group}</span></p> 
                     <p className='text-sm'>Formato: <span className='text-gray-500'>{booking.service_type}</span></p> 
-                    <p className="text-sm text-gray-700">
-                      📅 {booking.date} · ⏰ {booking.start_time} - {booking.end_time}
+                    <p className="text-sm text-gray-700 flex items-center gap-3">
+                      <span className="flex items-center gap-1">
+                        <svg className="text-[#52B788]" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="4" width="18" height="18" rx="2" />
+                          <path d="M16 2v4M8 2v4M3 10h18" />
+                        </svg>
+                        {booking.date}
+                      </span>
+                      ·
+                      <span className="flex items-center gap-1">
+                        <svg className="text-[#52B788]" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="9" />
+                          <path d="M12 7v5l3 3" />
+                        </svg>
+                        {booking.start_time} - {booking.end_time}
+                      </span>
                     </p>
                   </div>
 

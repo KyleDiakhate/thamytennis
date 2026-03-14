@@ -137,17 +137,18 @@ export default function BookingModal({ isOpen, onClose }: Props) {
               {/* Sucesso */}
               {success ? (
                 <div className="text-center py-8">
-                  <div className="text-5xl mb-4">🎾</div>
+                  <div className="flex justify-center mb-4">
+                    <div className="w-16 h-16 rounded-full bg-[#52B788]/20 flex items-center justify-center">
+                      <svg className="text-[#52B788]" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="M3.6 9a9 9 0 0116.8 0M3.6 15a9 9 0 0016.8 0" />
+                      </svg>
+                    </div>
+                  </div>
                   <h3 className="text-xl font-extrabold text-[#1B4332] mb-2">Pedido Enviado!</h3>
                   <p className="text-[#1B4332]/60 text-sm leading-relaxed mb-6">
                     O teu pedido foi enviado à treinadora. Serás contactado em breve para confirmação.
                   </p>
-                  <button
-                    onClick={handleClose}
-                    className="bg-[#52B788] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#3d9e6e] transition"
-                  >
-                    Fechar
-                  </button>
                 </div>
               ) : (
                 <div className="flex flex-col gap-4">
@@ -213,7 +214,13 @@ export default function BookingModal({ isOpen, onClose }: Props) {
                               onClick={() => setSelectedSlot(slot)}
                               className={`border rounded-lg p-3 text-left text-sm transition ${selectedSlot?.id === slot.id ? 'border-[#52B788] bg-[#52B788]/10 text-[#1B4332]' : 'hover:border-[#52B788]/50'}`}
                             >
-                              ⏰ {slot.start_time} — {slot.end_time}
+                              <span className="flex items-center gap-2">
+                                <svg className="text-[#52B788]" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <circle cx="12" cy="12" r="9" />
+                                  <path d="M12 7v5l3 3" />
+                                </svg>
+                                {slot.start_time} — {slot.end_time}
+                              </span>
                             </button>
                           ))}
                         </div>

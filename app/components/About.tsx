@@ -31,15 +31,18 @@ export default function About(){
                         Fui bolsista no Esporte Clube Pinheiros e aos 16 anos mudei-me para Espanha. 
                         Hoje vivo em Portugal — onde cheguei ao ranking 1 de seniores femininos.
                     </p>
-                    <ul className="flex flex-col gap-2">
+                    <ul className="flex flex-col gap-3">
                         {[
-                            "🎾 Competidora ativa no circuito nacional",
-                            "🏆 Ranking 1 de seniores femininos em Portugal",
-                            "👧 Treinos para crianças, adolescentes e adultos",
-                            "📍 Experiência no Clube Parque das Nações, Lisboa",
+                            "Competidora ativa no circuito nacional",
+                            "Ranking 1 de seniores femininos em Portugal",
+                            "Treinos para crianças, adolescentes e adultos",
+                            "Experiência no Clube Parque das Nações, Lisboa",
                         ].map((item) => (
-                            <li key={item} className="text-[#1B4332]/70 text-base">
-                                {item}
+                            <li key={item} className="flex items-center gap-3">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#52B788" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
+                                     <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                <span className="text-[#1B4332]/70 text-base">{item}</span>
                             </li>
                         ))}
                     </ul>

@@ -135,9 +135,14 @@ export default function SchedulePage() {
                 
                 <div className="flex flex-col gap-1">
                   <h2 className="font-semibold text-gray-900">{DAYS[slot.day_of_week]}</h2>
-                  <p className="text-sm text-gray-500">⏰ {slot.start_time} - {slot.end_time}</p>
+                  <p className="text-sm text-gray-500 flex items-center gap-1">
+                    <svg className="text-[#52B788]" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M12 7v5l3 3" />
+                    </svg>
+                     {slot.start_time} - {slot.end_time}
+                  </p>
                 </div>
-
                 <div className="flex items-center gap-3">
                   <span className={`text-xs font-medium px-3 py-1 rounded-full ${slot.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
                     {slot.is_active ? 'Ativo' : 'Inativo'}
